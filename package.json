@@ -1,0 +1,45 @@
+{
+  "name": "quanttogo-mcp",
+  "version": "0.1.0",
+  "description": "QuantToGo MCP Server — quantitative trading strategies, indices, and market signals for AI agents",
+  "mcpName": "io.github.quanttogo/quanttogo-mcp",
+  "main": "dist/index.js",
+  "bin": {
+    "quanttogo-mcp": "dist/index.js"
+  },
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsc --watch"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "quantitative-trading",
+    "trading-signals",
+    "market-data",
+    "index-fund",
+    "ai-agent",
+    "finance",
+    "investment"
+  ],
+  "author": "QuantToGo <admin@quanttogo.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/quanttogo/quanttogo-mcp"
+  },
+  "homepage": "https://www.quanttogo.com",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.27.1",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.7.0"
+  }
+}
