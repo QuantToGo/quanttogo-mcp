@@ -1,23 +1,20 @@
 {
-  "$schema": "https://registry.modelcontextprotocol.io/schemas/server.json",
-  "name": "io.github.quanttogo/quanttogo-mcp",
-  "description": "Access QuantToGo's live-tracked quantitative trading strategies, custom market indices, and performance data for AI-powered investment research.",
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-10-17/server.schema.json",
+  "name": "io.github.michaeljiangmingfeng-debug/quanttogo-mcp",
+  "description": "Quantitative trading strategies, market indices, and live performance data",
   "repository": {
-    "url": "https://github.com/quanttogo/quanttogo-mcp",
+    "url": "https://github.com/michaeljiangmingfeng-debug/quanttogo-mcp",
     "source": "github"
   },
-  "version_detail": {
-    "version": "0.1.0",
-    "release_date": "2026-03-09",
-    "is_latest": true
-  },
+  "version": "0.1.1",
   "packages": [
     {
-      "registry_name": "npm",
-      "name": "quanttogo-mcp",
-      "version": "0.1.0",
-      "runtime": "node",
-      "environment_variables": []
+      "registryType": "npm",
+      "identifier": "quanttogo-mcp",
+      "version": "0.1.1",
+      "transport": {
+        "type": "stdio"
+      }
     }
   ]
 }

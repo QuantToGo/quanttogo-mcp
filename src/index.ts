@@ -33,7 +33,7 @@ function pick<T extends Record<string, unknown>>(
 
 const server = new McpServer({
   name: "quanttogo-mcp",
-  version: "0.1.0",
+  version: "0.1.1",
 });
 
 // ── Tool: list_strategies ────────────────────────────────────

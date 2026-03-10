@@ -1,12 +1,18 @@
 {
   "name": "quanttogo-mcp",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "QuantToGo MCP Server — quantitative trading strategies, indices, and market signals for AI agents",
-  "mcpName": "io.github.quanttogo/quanttogo-mcp",
+  "mcpName": "io.github.michaeljiangmingfeng-debug/quanttogo-mcp",
   "main": "dist/index.js",
   "bin": {
     "quanttogo-mcp": "dist/index.js"
   },
+  "files": [
+    "dist/",
+    "server.json",
+    "README.md",
+    "LICENSE"
+  ],
   "type": "module",
   "scripts": {
     "build": "tsc",
@@ -28,7 +34,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/quanttogo/quanttogo-mcp"
+    "url": "https://github.com/michaeljiangmingfeng-debug/quanttogo-mcp"
   },
   "homepage": "https://www.quanttogo.com",
   "engines": {
