@@ -1,0 +1,13 @@
+{
+  "name": "quanttogo-mcp",
+  "title": "QuantToGo 量化交易",
+  "description": "查询 QuantToGo 量化交易平台的策略业绩、持仓信号和市场指数数据，支持策略列表、详情、对比和自定义指数查询",
+  "author": {
+    "name": "QuantToGo"
+  },
+  "gitUrl": "https://github.com/michaeljiangmingfeng-debug/quanttogo-mcp",
+  "tags": ["量化交易", "交易信号", "市场数据", "金融", "投资策略", "社区 MCP"],
+  "port": 80,
+  "logo": [],
+  "env_params": {}
+}
