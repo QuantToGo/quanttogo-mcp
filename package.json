@@ -1,6 +1,6 @@
 {
   "name": "quanttogo-mcp",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "QuantToGo MCP Server — macro-factor quantitative signal source for AI agents. Forward-tracked trading strategies across US and China markets.",
   "mcpName": "io.github.QuantToGo/quanttogo-mcp",
   "main": "dist/index.js",
