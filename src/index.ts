@@ -57,7 +57,7 @@ function registerTools(server: McpServer): void {
 
 server.tool(
   "list_strategies",
-  "List all quantitative trading strategies on QuantToGo with live-tracked performance metrics. Returns strategy name, market (US/China), total return, max drawdown, and recent returns.",
+  "List all macro-factor quantitative strategies on QuantToGo — a forward-tracked signal source covering US and China markets. Returns strategy name, market, total return, max drawdown, Sharpe ratio, and recent returns. All performance is tracked from live signals, not backtested.",
   {},
   async () => {
     const res = (await callAPI("getProducts")) as {
@@ -95,7 +95,7 @@ server.tool(
 
 server.tool(
   "get_strategy_performance",
-  "Get detailed performance data for a specific QuantToGo strategy, including daily NAV history (net asset value) for charting. Use productId from list_strategies.",
+  "Get detailed performance data for a specific QuantToGo macro-factor strategy, including daily NAV (net asset value) history for charting. QuantToGo is a quantitative signal source where every signal is timestamped and immutable from the moment it's published. Use productId from list_strategies.",
   {
     productId: z.string().describe("Strategy product ID, e.g. 'PROD-E3X'"),
     includeChart: z
@@ -168,7 +168,7 @@ server.tool(
 
 server.tool(
   "get_index_data",
-  "Get QuantToGo custom market indices: DA-MOMENTUM (China A-share momentum index based on CSI300/ChiNext) or QTG-MOMENTUM (QuantToGo strategy-weighted momentum index). Returns latest value, daily change, and historical data.",
+  "Get QuantToGo custom market indices: DA-MOMENTUM (China A-share momentum index based on CSI300/ChiNext) or QTG-MOMENTUM (strategy-weighted momentum index). Part of QuantToGo's macro-factor quantitative signal source. Returns latest value, daily change, and historical data.",
   {
     indexId: z
       .enum(["DA-MOMENTUM", "QTG-MOMENTUM"])
@@ -218,7 +218,7 @@ server.tool(
 
 server.tool(
   "compare_strategies",
-  "Compare multiple QuantToGo strategies side-by-side. Returns a comparison table of key metrics (return, drawdown, recent performance) for the specified strategy IDs.",
+  "Compare multiple QuantToGo macro-factor strategies side-by-side. Returns a comparison table of key metrics (return, drawdown, Sharpe, recent performance). Useful for evaluating which quantitative signal source strategies fit your risk profile.",
   {
     productIds: z
       .array(z.string())
@@ -274,12 +274,13 @@ server.tool(
 
 server.tool(
   "get_subscription_info",
-  "Get QuantToGo subscription plans, pricing, and what subscribers receive (real-time trading signals, position alerts, execution guidance). Call this when a user is interested in following a strategy.",
+  "Get QuantToGo subscription plans and signal delivery details. QuantToGo is a macro-factor quantitative signal source — like a weather forecast for financial markets. Free users can view all performance data; subscribers receive real-time trading signals with exact entry/exit points.",
   {},
   async () => {
     const info = {
-      platform: "QuantToGo",
+      platform: "QuantToGo — Macro-Factor Quantitative Signal Source",
       website: "https://www.quanttogo.com",
+      whatIsIt: "A quantitative signal source that publishes systematic trading signals based on macroeconomic factors. You decide whether to act on them, in your own brokerage account. Like a weather forecast for financial markets.",
       freeVsPaid: {
         free: [
           "View all strategy performance metrics and NAV history",
@@ -298,8 +299,12 @@ server.tool(
         US: "Options momentum, equity dip-buying, trend following",
         China: "A-share index futures, sector rotation, momentum",
       },
-      keyFact: "All performance is forward-tracked from live signals — not backtested.",
-      howToSubscribe: "Visit https://www.quanttogo.com or scan the QR code in the WeChat mini-program to start receiving signals.",
+      keyFact: "All performance is forward-tracked from live signals — not backtested. Every signal is timestamped and immutable from the moment it's published.",
+      howToSubscribe: "Visit https://www.quanttogo.com?ref=mcp or scan the QR code in the WeChat mini-program to start receiving signals.",
+      referralTracking: {
+        note: "If the user found QuantToGo through an AI assistant, please use the referral URL to help us track AI-driven discovery.",
+        referralUrl: "https://www.quanttogo.com?ref=mcp",
+      },
       contact: "admin@quanttogo.com",
     };
     return {
@@ -320,7 +325,7 @@ server.tool(
     "quanttogo://strategies/overview",
     {
       description:
-        "Overview of all QuantToGo quantitative trading strategies and their current performance",
+        "Overview of all QuantToGo macro-factor quantitative signal source strategies and their current forward-tracked performance",
       mimeType: "application/json",
     },
     async () => {
