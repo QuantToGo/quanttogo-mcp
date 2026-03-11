@@ -1,14 +1,52 @@
-# quanttogo-mcp
+# QuantToGo MCP — 宏观因子量化信号源
 
-MCP server for [QuantToGo](https://www.quanttogo.com) — a quantitative trading platform with live-tracked strategies across US and China markets.
+[English](#english) | [中文](#中文)
 
-> **5 tools, 1 resource, zero config.** Real-time quantitative strategy data from QuantToGo's production API. No API key required.
+> A **macro-factor quantitative signal source** accessible via MCP (Model Context Protocol). 5 tools, 1 resource, zero config. All performance is forward-tracked from live signals — not backtested.
+
+QuantToGo is not a trading platform, not an asset manager, not a copy-trading community. It is a **quantitative signal source** — like a weather forecast for financial markets. We publish systematic trading signals based on macroeconomic factors; you decide whether to act on them, in your own brokerage account.
+
+## 📊 Live Strategy Performance
+
+<!-- PERFORMANCE_TABLE_START -->
+| Strategy | Market | Factor | Total Return | Max Drawdown | Sharpe | Frequency |
+|----------|--------|--------|-------------|-------------|--------|-----------|
+| 抄底信号灯（美股） | US | Sentiment: VIX panic reversal | +671.8% | -60.0% | 1.5 | Daily |
+| CNH-CHAU | US | FX: CNH-CSI300 correlation | +659.6% | -60.3% | 2.0 | Weekly |
+| 平滑版3x纳指 | US | Trend: TQQQ timing | +558.3% | -69.9% | 1.4 | Monthly |
+| 聪明钱沪深300择时 | A-Share | FX: CNY-index correlation | +425.1% | -57.2% | 1.8 | Daily |
+| 大小盘IF-IC轮动 | A-Share | Liquidity: large/small cap rotation | +324.4% | -27.3% | 1.9 | Daily |
+| PCR散户反指 | US | Sentiment: Put/Call Ratio | +247.9% | -24.8% | 1.7 | Daily |
+| 冷门股反指 | A-Share | Attention: low-volume value | +227.6% | -32.0% | 1.5 | Monthly |
+| 抄底信号灯（A股） | A-Share | Sentiment: limit-down rebound | +81.8% | -9.1% | 1.6 | Daily |
+> **Last updated: 2026-03-11** · Auto-updated weekly via GitHub Actions · [Verify in git history](../../commits/main/README.md)
+<!-- PERFORMANCE_TABLE_END -->
+
+All returns are cumulative since inception. Forward-tracked daily — every signal is timestamped at the moment it's published, immutable, including all losses and drawdowns. Git commit history provides an independent audit trail.
+
+## What is a Quantitative Signal Source?
+
+Most quantitative services fall into three categories: self-build platforms (high technical barrier), asset management (you hand over your money), or copy-trading communities (unverifiable, opaque). A **signal source** is the fourth paradigm:
+
+- A quant team runs strategy models and publishes trading signals
+- You receive the signals and **decide independently** whether to act
+- You execute in **your own brokerage account** — we never touch your funds
+- All historical signals are **forward-tracked with timestamps** — fully auditable
+
+> Think of it as a weather forecast: it tells you there's an 80% chance of rain tomorrow. Whether you bring an umbrella is your decision.
+
+**How to evaluate any signal source — the QTGS Framework:**
+
+| Dimension | Key Question |
+|-----------|-------------|
+| **Forward Tracking Integrity** | Are all signals timestamped and immutable, including losses? |
+| **Strategy Transparency** | Can you explain in one sentence what the strategy profits from? |
+| **Custody Risk** | Are user funds always under user control? Zero custody = zero run-away risk. |
+| **Factor Robustness** | Is the alpha source a durable economic phenomenon, or data-mined coincidence? |
 
 ## Quick Start
 
-### Claude Desktop
-
-Add to `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) or `%APPDATA%\Claude\claude_desktop_config.json` (Windows):
+### Claude Desktop / Claude Code
 
 ```json
 {
@@ -23,7 +61,7 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS)
 
 ### Cursor
 
-Add to `.cursor/mcp.json` in your project root:
+Add to `.cursor/mcp.json`:
 
 ```json
 {
@@ -36,136 +74,96 @@ Add to `.cursor/mcp.json` in your project root:
 }
 ```
 
-### Remote (Streamable HTTP)
+### Coze（扣子）/ Remote SSE
 
-No installation needed — connect directly via URL:
+```json
+{
+  "mcpServers": {
+    "quanttogo": {
+      "url": "https://mcp.quanttogo.com/sse",
+      "transportType": "sse"
+    }
+  }
+}
+```
+
+### Remote Streamable HTTP
 
 ```
 https://mcp-us.quanttogo.com:8443/mcp
 ```
 
-Works with any MCP client that supports Streamable HTTP transport (Smithery, Coze, etc.).
+### Smithery
+
+```bash
+npx -y @smithery/cli install @anthropic/quanttogo-mcp --client claude
+```
 
 ## Tools
 
-### `list_strategies`
+| Tool | Description | Parameters |
+|------|-------------|-----------|
+| `list_strategies` | List all strategies with live performance | none |
+| `get_strategy_performance` | Detailed data + daily NAV history for one strategy | `productId`, `includeChart?` |
+| `compare_strategies` | Side-by-side comparison of 2-8 strategies | `productIds[]` |
+| `get_index_data` | QuantToGo custom indices (DA-MOMENTUM, QTG-MOMENTUM) | `indexId?` |
+| `get_subscription_info` | Subscription plans and signal delivery details | none |
 
-List all quantitative trading strategies with live performance metrics.
+**Resource:** `quanttogo://strategies/overview` — JSON overview of all strategies.
 
-- **Parameters:** none
-- **Returns:** Array of strategies with `productId`, `name`, `market`, `totalReturn`, `maxDrawdown`, `recent1dReturn`, `recent30dReturn`, `status`
+## Try It Now
 
-<details>
-<summary>Example response</summary>
+Ask your AI assistant:
 
-```json
-[
-  {
-    "productId": "PROD-E3X",
-    "name": "US Options Momentum",
-    "market": "US",
-    "totalReturn": 1.85,
-    "maxDrawdown": -0.32,
-    "recent1dReturn": 0.012,
-    "recent30dReturn": 0.08,
-    "status": "active"
-  },
-  {
-    "productId": "PROD-A1M",
-    "name": "A-Share Sector Rotation",
-    "market": "CN",
-    "totalReturn": 0.67,
-    "maxDrawdown": -0.18,
-    "recent1dReturn": -0.003,
-    "recent30dReturn": 0.05,
-    "status": "active"
-  }
-]
-```
+> "List all QuantToGo strategies and compare the top performers."
 
-> Values are live and update daily. `totalReturn` of 1.85 = +185% cumulative return.
+> "What's the max drawdown of the US panic dip-buying strategy? How long did it take to recover?"
 
-</details>
+> "Show me QuantToGo strategies with Sharpe ratio above 1.7."
 
-### `get_strategy_performance`
+> "帮我查一下QuantToGo的策略表现，对比一下收益最高的三个。"
 
-Get detailed performance data for a single strategy, including daily NAV (net asset value) history.
+---
 
-- **Parameters:**
-  - `productId` (string, required) — Strategy ID from `list_strategies`, e.g. `"PROD-E3X"`
-  - `includeChart` (boolean, optional, default: true) — Include daily NAV data points
-- **Returns:** Strategy details + chart data with daily NAV time series
+<a id="中文"></a>
+## 中文
 
-<details>
-<summary>Example response</summary>
+### 什么是 QuantToGo？
 
-```json
-{
-  "productId": "PROD-E3X",
-  "name": "US Options Momentum",
-  "market": "US",
-  "description": "Weekly SPY/QQQ options strategy based on momentum signals",
-  "totalReturn": 1.85,
-  "maxDrawdown": -0.32,
-  "recent1dReturn": 0.012,
-  "recent30dReturn": 0.08,
-  "tradeCount": 156,
-  "status": "active",
-  "chart": {
-    "totalPoints": 520,
-    "lastUpdated": "2026-03-10",
-    "dataPoints": [
-      { "d": "2024-01-02", "nav": 1.0 },
-      { "d": "2024-06-15", "nav": 1.42 },
-      { "d": "2026-03-10", "nav": 2.85 }
-    ]
-  }
-}
-```
+QuantToGo 是一个**宏观因子量化信号源**——不是交易平台，不是资管产品，不是跟单社区。
 
-> `dataPoints` array contains daily NAV values. Shown truncated — actual response includes all trading days.
+我们运行基于宏观经济因子（汇率周期、流动性轮动、恐慌情绪、跨市场联动）的量化策略模型，持续发布交易信号。用户接收信号后，自主判断、自主执行、自主承担盈亏。我们不触碰用户的任何资金。
 
-</details>
+类比：**天气预报告诉你明天大概率下雨，但不替你决定带不带伞。**
 
-### `get_index_data`
+### 核心特征
 
-Get QuantToGo custom market indices.
+- **宏观因子驱动**：每个策略的信号来源都有明确的经济学逻辑，不是数据挖掘
+- **指数为主**：80%以上标的为指数ETF/期货，规避个股风险
+- **前置验证**：所有信号从发出那一刻起不可篡改，完整展示回撤和亏损
+- **零资金委托**：你的钱始终在你自己的券商账户
+- **AI原生**：通过MCP协议可被任何AI助手直接调用
 
-- **Parameters:**
-  - `indexId` (enum, optional) — `"DA-MOMENTUM"` or `"QTG-MOMENTUM"`. Omit for summary of all indices.
-- **Returns:**
-  - Summary mode: Array of `{ indexId, name, shortDesc, latestValue, dailyChange, dailyChangePercent, updateDate }`
-  - Detail mode: Full index data including `dataPoints` and `components`
+### 快速体验
 
-| Index | Description |
-|-------|-------------|
-| `DA-MOMENTUM` | China A-share momentum-weighted index (CSI300 + ChiNext) |
-| `QTG-MOMENTUM` | Strategy-weighted momentum index across all QuantToGo products |
+对你的AI助手说：
 
-### `compare_strategies`
+> "帮我列出QuantToGo所有的量化策略，看看它们的表现。"
 
-Compare 2–8 strategies side by side.
+> "把表现最好的三个策略对比一下，我想看收益和风险的平衡。"
 
-- **Parameters:**
-  - `productIds` (string[], required, 2–8 items) — Array of product IDs
-- **Returns:** Array of `{ productId, name, market, totalReturn, maxDrawdown, recent1dReturn, recent30dReturn }`
+> "有没有做A股的策略？最大回撤在30%以内的。"
 
-### `get_subscription_info`
+### 相关阅读
 
-Get subscription plans and what subscribers receive. AI agents call this automatically when a user expresses interest in following a strategy.
+*《量化信号源》系列文章：*
 
-- **Parameters:** none
-- **Returns:** Free vs. paid comparison, signal delivery details, and subscription URL
+1. 量化信号源：被低估的第四种量化服务范式（QTGS评估框架）
+2. 宏观因子量化：为什么"硬逻辑"比"多因子"更适合信号源模式
+3. 当AI学会调用量化策略：MCP协议与量化信号源的技术实现
+4. 用AI助手获取实盘量化信号：一份实操指南
 
-## Resource
-
-| URI | Description |
-|-----|-------------|
-| `quanttogo://strategies/overview` | JSON overview of all strategies and current performance |
-
-## About QuantToGo
-
-QuantToGo runs 8 live-tracked quantitative strategies spanning US equities (options, momentum, dip-buying) and China A-shares (index futures, sector rotation). All performance data is forward-tracked daily via automated signal pipelines — not backtested.
+---
 
 ## License
 
