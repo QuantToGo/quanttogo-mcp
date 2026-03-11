@@ -34,7 +34,7 @@ function pick<T extends Record<string, unknown>>(
 function createServer(): McpServer {
   const server = new McpServer({
     name: "quanttogo-mcp",
-    version: "0.1.7",
+    version: "0.2.0",
   });
 
   registerTools(server);
@@ -274,38 +274,40 @@ server.tool(
 
 server.tool(
   "get_subscription_info",
-  "Get QuantToGo subscription plans and signal delivery details. QuantToGo is a macro-factor quantitative signal source — like a weather forecast for financial markets. Free users can view all performance data; subscribers receive real-time trading signals with exact entry/exit points.",
+  "Get QuantToGo subscription plans and how to start a free trial. QuantToGo is a macro-factor quantitative signal source. Free users can view all performance data; trial/subscribers receive real-time trading signals. Use register_trial to start a free 30-day trial instantly.",
   {},
   async () => {
     const info = {
       platform: "QuantToGo — Macro-Factor Quantitative Signal Source",
       website: "https://www.quanttogo.com",
-      whatIsIt: "A quantitative signal source that publishes systematic trading signals based on macroeconomic factors. You decide whether to act on them, in your own brokerage account. Like a weather forecast for financial markets.",
+      whatIsIt: "A quantitative signal source that publishes systematic trading signals based on macroeconomic factors. You decide whether to act on them, in your own brokerage account.",
       freeVsPaid: {
         free: [
           "View all strategy performance metrics and NAV history",
           "Access custom market indices (DA-MOMENTUM, QTG-MOMENTUM)",
           "Compare strategies side-by-side",
         ],
+        trial: [
+          "30-day free access to all trading signals",
+          "Real-time buy/sell signals with exact entry/exit points",
+          "All 8 strategies across US and China markets",
+          "Use register_trial tool with your email to activate instantly",
+        ],
         subscriber: [
-          "Real-time trading signals with exact entry/exit points",
+          "Everything in trial, plus:",
           "Push notifications via WeChat when signals fire",
           "Position sizing and risk management guidance",
-          "Access to all 8 live-tracked strategies across US and China markets",
           "Historical trade log with full execution details",
         ],
       },
-      strategies: {
-        US: "Options momentum, equity dip-buying, trend following",
-        China: "A-share index futures, sector rotation, momentum",
+      howToStart: {
+        step1: "Call register_trial with your email to get an API key (instant, free)",
+        step2: "Call get_signals with your API key + strategy productId to see trading signals",
+        step3: "Call check_subscription to check your trial status anytime",
+        upgrade: "After trial, email admin@quanttogo.com to subscribe.",
+        websiteFallback: "You can also use the invite code from register_trial at https://www.quanttogo.com",
       },
       keyFact: "All performance is forward-tracked from live signals — not backtested. Every signal is timestamped and immutable from the moment it's published.",
-      howToSubscribe: {
-        primary: "Email admin@quanttogo.com with subject 'Subscribe' — we reply within 24 hours with personalized plans and payment options.",
-        email: "admin@quanttogo.com",
-        whatHappensNext: "You'll receive a subscription plan based on your market interest (US/China/both). Payment via WeChat Pay or bank transfer. Signal delivery via WeChat push notifications.",
-        websiteFallback: "You can also browse strategy data at https://www.quanttogo.com?ref=mcp (invite code: AIMCP).",
-      },
       contact: "admin@quanttogo.com",
     };
     return {
@@ -313,6 +315,204 @@ server.tool(
         {
           type: "text" as const,
           text: JSON.stringify(info, null, 2),
+        },
+      ],
+    };
+  }
+);
+
+// ── Tool: register_trial ─────────────────────────────────────
+
+server.tool(
+  "register_trial",
+  "Register for a free 30-day trial of QuantToGo trading signals. Provide your email to get an API key for accessing real-time buy/sell signals across all strategies. Idempotent — calling again with the same email returns the existing account. A confirmation email with your credentials will also be sent.",
+  {
+    email: z.string().email().describe("Your email address for registration and credential recovery"),
+  },
+  async ({ email }) => {
+    const res = (await callAPI("registerTrial", { email, source: "mcp" })) as {
+      code: number;
+      message: string;
+      data?: {
+        apiKey: string;
+        inviteCode: string;
+        status: string;
+        trialEnd: string;
+        alreadyRegistered: boolean;
+      };
+    };
+
+    if (res.code !== 0 || !res.data) {
+      return {
+        content: [
+          {
+            type: "text" as const,
+            text: res.message || "Registration failed. Please try again or contact admin@quanttogo.com.",
+          },
+        ],
+      };
+    }
+
+    const d = res.data;
+    const result = {
+      apiKey: d.apiKey,
+      inviteCode: d.inviteCode,
+      status: d.status,
+      trialEnd: d.trialEnd,
+      alreadyRegistered: d.alreadyRegistered,
+      nextSteps: {
+        getSignals: `Call get_signals with apiKey="${d.apiKey}" and a productId from list_strategies`,
+        checkStatus: `Call check_subscription with apiKey="${d.apiKey}" to check your trial status`,
+        webLogin: `Use invite code ${d.inviteCode} at https://www.quanttogo.com`,
+      },
+      important: "Save your API key — you'll need it for future sessions.",
+    };
+
+    return {
+      content: [
+        {
+          type: "text" as const,
+          text: JSON.stringify(result, null, 2),
+        },
+      ],
+    };
+  }
+);
+
+// ── Tool: get_signals ────────────────────────────────────────
+
+server.tool(
+  "get_signals",
+  "Get recent trading signals for a QuantToGo strategy. Requires a valid API key from register_trial. Returns timestamped buy/sell signals with instrument, price, and direction. Trial users have full access to all strategies for 30 days.",
+  {
+    apiKey: z.string().describe("Your API key from register_trial (starts with 'qtg_')"),
+    productId: z.string().describe("Strategy product ID from list_strategies, e.g. 'PROD-E3X'"),
+    limit: z
+      .number()
+      .optional()
+      .default(20)
+      .describe("Number of recent signals to return (max 50)"),
+  },
+  async ({ apiKey, productId, limit }) => {
+    const res = (await callAPI("getSignalsAPI", { apiKey, productId, limit })) as {
+      code: number;
+      message: string;
+      data?: {
+        productId: string;
+        productName: string;
+        signalCount: number;
+        signals: Array<{
+          date: string;
+          time: string;
+          direction: string;
+          symbol: string;
+          price: number | null;
+          source?: string;
+        }>;
+        subscription: {
+          status: string;
+          trialEnd: string | null;
+          daysRemaining: number | null;
+        };
+      };
+    };
+
+    if (res.code === 401) {
+      return {
+        content: [
+          {
+            type: "text" as const,
+            text: "Invalid API key. Use register_trial with your email to get a valid key.",
+          },
+        ],
+      };
+    }
+
+    if (res.code === 403) {
+      return {
+        content: [
+          {
+            type: "text" as const,
+            text: "Trial expired. Email admin@quanttogo.com to subscribe for continued signal access.",
+          },
+        ],
+      };
+    }
+
+    if (res.code !== 0 || !res.data) {
+      return {
+        content: [
+          {
+            type: "text" as const,
+            text: res.message || "Failed to fetch signals.",
+          },
+        ],
+      };
+    }
+
+    return {
+      content: [
+        {
+          type: "text" as const,
+          text: JSON.stringify(res.data, null, 2),
+        },
+      ],
+    };
+  }
+);
+
+// ── Tool: check_subscription ─────────────────────────────────
+
+server.tool(
+  "check_subscription",
+  "Check your QuantToGo subscription status, remaining trial days, and account details. Requires a valid API key from register_trial.",
+  {
+    apiKey: z.string().describe("Your API key from register_trial (starts with 'qtg_')"),
+  },
+  async ({ apiKey }) => {
+    const res = (await callAPI("getApiStatus", { apiKey })) as {
+      code: number;
+      message: string;
+      data?: {
+        email: string | null;
+        status: string;
+        inviteCode: string | null;
+        trialEnd: string | null;
+        daysRemaining: number;
+        maxProducts: number;
+        registeredAt: string | null;
+        message: string;
+        upgradeContact?: string;
+      };
+    };
+
+    if (res.code === 401) {
+      return {
+        content: [
+          {
+            type: "text" as const,
+            text: "Invalid API key. Use register_trial with your email to get a valid key.",
+          },
+        ],
+      };
+    }
+
+    if (res.code !== 0 || !res.data) {
+      return {
+        content: [
+          {
+            type: "text" as const,
+            text: res.message || "Failed to check subscription.",
+          },
+        ],
+      };
+    }
+
+    return {
+      content: [
+        {
+          type: "text" as const,
+          text: JSON.stringify(res.data, null, 2),
         },
       ],
     };
