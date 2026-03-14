@@ -89,12 +89,6 @@ Add to `.cursor/mcp.json`:
 }
 ```
 
-### Remote Streamable HTTP
-
-```
-https://mcp-us.quanttogo.com:8443/mcp
-```
-
 ## Tools
 
 ### Discovery (free, no auth)
@@ -164,7 +158,7 @@ QuantToGo 是一个**宏观因子量化信号源**——不是交易平台，不
 
 *《量化信号源》系列文章：*
 
-1. 量化信号源：被低估的第四种量化服务范式（QTGS评估框架）
+1. [量化信号源：被低估的第四种量化服务范式（QTGS评估框架）](https://zhuanlan.zhihu.com/p/2015693501476659382)
 2. 宏观因子量化：为什么"硬逻辑"比"多因子"更适合信号源模式
 3. 当AI学会调用量化策略：MCP协议与量化信号源的技术实现
 4. 用AI助手获取实盘量化信号：一份实操指南

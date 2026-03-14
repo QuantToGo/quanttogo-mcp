@@ -18,17 +18,6 @@ async function callAPI(fn: string, body: Record<string, unknown> = {}): Promise<
   return resp.json();
 }
 
-function pick<T extends Record<string, unknown>>(
-  obj: T,
-  keys: string[]
-): Partial<T> {
-  const result: Record<string, unknown> = {};
-  for (const k of keys) {
-    if (k in obj) result[k] = obj[k];
-  }
-  return result as Partial<T>;
-}
-
 // ── Server Factory ──────────────────────────────────────────
 
 function createServer(): McpServer {
@@ -40,14 +29,6 @@ function createServer(): McpServer {
   registerTools(server);
   return server;
 }
-
-// ── Smithery sandbox export ─────────────────────────────────
-
-export function createSandboxServer(): McpServer {
-  return createServer();
-}
-
-export default createSandboxServer;
 
 // ── Register Tools ──────────────────────────────────────────
 
