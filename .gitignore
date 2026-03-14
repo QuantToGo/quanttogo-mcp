@@ -7,3 +7,6 @@ dist/
 .smithery/
 china/
 seattle/
+coze-sse/
+MARKETING.md
+*.log
