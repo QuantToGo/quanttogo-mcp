@@ -89,6 +89,12 @@ Add to `.cursor/mcp.json`:
 }
 ```
 
+### Remote Streamable HTTP
+
+```
+https://mcp-us.quanttogo.com:8443/mcp
+```
+
 ## Tools
 
 ### Discovery (free, no auth)
