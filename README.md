@@ -95,6 +95,10 @@ Add to `.cursor/mcp.json`:
 https://mcp-us.quanttogo.com:8443/mcp
 ```
 
+## Hosted deployment
+
+A hosted deployment is available on [Fronteir AI](https://fronteir.ai/mcp/quanttogo-quanttogo-mcp).
+
 ## Tools
 
 ### Discovery (free, no auth)
