@@ -21,7 +21,7 @@ QuantToGo is not a trading platform, not an asset manager, not a copy-trading co
 | PCR散户反指 | US | Sentiment: Put/Call Ratio | +247.9% | -24.8% | 1.7 | Daily |
 | 冷门股反指 | China | Attention: low-volume value | +227.6% | -32.0% | 1.5 | Monthly |
 | 抄底信号灯（A股） | China | Sentiment: limit-down rebound | +81.8% | -9.1% | 1.6 | Daily |
-> **Last updated: 2026-04-13** · Auto-updated weekly via GitHub Actions · [Verify in git history](../../commits/main/README.md)
+> **Last updated: 2026-04-20** · Auto-updated weekly via GitHub Actions · [Verify in git history](../../commits/main/README.md)
 <!-- PERFORMANCE_TABLE_END -->
 
 All returns are cumulative since inception. Forward-tracked daily — every signal is timestamped at the moment it's published, immutable, including all losses and drawdowns. Git commit history provides an independent audit trail.
