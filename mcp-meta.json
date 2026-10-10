@@ -1,12 +1,19 @@
 {
   "name": "quanttogo-mcp",
-  "title": "QuantToGo — Macro-Factor Quantitative Signal Source",
-  "description": "宏观因子量化信号源。8 个工具覆盖策略发现、信号获取和试用注册，覆盖美股和A股市场，所有业绩数据为实盘前瞻跟踪。",
+  "title": "风控单 QuantToGo — A-share risk desk",
+  "description": "替你盯着手上的 A 股持仓：查风险读数（三个月内跌 ≥15% 的概率、安全区、过热档、警戒线三档）、核对持有理由、建风控单、看市场环境和台账复盘。远程地址 https://mcp.quanttogo.com/v2",
   "author": {
     "name": "QuantToGo"
   },
   "gitUrl": "https://github.com/QuantToGo/quanttogo-mcp",
-  "tags": ["quantitative-trading", "trading-signals", "macro-factors", "MCP", "AI-agent", "quantitative-finance"],
+  "tags": [
+    "risk-management",
+    "a-share",
+    "quantitative-finance",
+    "MCP",
+    "AI-agent",
+    "quanttogo"
+  ],
   "port": 80,
   "logo": [],
   "env_params": {}

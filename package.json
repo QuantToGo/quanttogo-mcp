@@ -1,7 +1,7 @@
 {
   "name": "quanttogo-mcp",
-  "version": "0.3.0",
-  "description": "MCP Server for AI trading signals — 8 live strategies across US and China markets. Free 30-day trial.",
+  "version": "1.0.0",
+  "description": "风控单 QuantToGo — MCP server: risk readings, reason checks and risk orders for A-share holdings. Bridge to https://mcp.quanttogo.com/v2",
   "mcpName": "com.quanttogo/quanttogo-mcp",
   "main": "dist/index.js",
   "bin": {
@@ -22,14 +22,13 @@
   "keywords": [
     "mcp",
     "model-context-protocol",
-    "trading-signals",
-    "ai-trading",
+    "risk-management",
+    "a-share",
+    "china-stocks",
     "quantitative",
-    "market-data",
     "ai-agent",
     "finance",
-    "stocks",
-    "china-a-share"
+    "quanttogo"
   ],
   "author": "QuantToGo <admin@quanttogo.com>",
   "license": "MIT",

@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.0] - 2026-10-10
+
+### Changed
+- The product is now **风控单 QuantToGo** (a risk desk for A-share holdings). All previous strategy/signal tools are removed.
+- This package is a stdio bridge to the hosted server `https://mcp.quanttogo.com/v2` (Streamable HTTP; legacy SSE at `/v2/sse`). Tools are fetched from the server at start.
+
+### Added
+- `risk_check`, `verify_reasons`, `create_risk_order`, `my_risk_orders`, `market_now`, `ledger_review`, `evidence_card`, `login`.
+
 ## [0.2.0] - 2026-03-11
 
 ### Added

@@ -1,191 +1,102 @@
-# QuantToGo MCP — 宏观因子量化信号源
+# 风控单 QuantToGo — MCP Server
 
-[![awesome-mcp-servers](https://img.shields.io/badge/awesome--mcp--servers-listed-blue)](https://github.com/punkpeye/awesome-mcp-servers) [![npm](https://img.shields.io/npm/v/quanttogo-mcp)](https://www.npmjs.com/package/quanttogo-mcp) [![Downloads](https://img.shields.io/npm/dw/quanttogo-mcp)](https://www.npmjs.com/package/quanttogo-mcp)
+[![npm](https://img.shields.io/npm/v/quanttogo-mcp)](https://www.npmjs.com/package/quanttogo-mcp) [![Downloads](https://img.shields.io/npm/dw/quanttogo-mcp)](https://www.npmjs.com/package/quanttogo-mcp)
 
-[English](#english) | [中文](#中文)
+[中文](#中文) | [English](#english)
 
-> A **macro-factor quantitative signal source** accessible via MCP (Model Context Protocol). 8 tools, 1 resource, zero config. AI Agents can self-register for a free trial, query live trading signals, and check subscription status — all within the conversation. All performance is forward-tracked from live signals — not backtested.
+**替你盯着手上的 A 股持仓。** 给一个标的（个股、行业、ETF、基金、宽基指数），返回它三个月内跌 ≥15% 的概率、平时的概率、在不在安全区、过热档和红灯、警戒线三档；核对你的持有理由；建一张风控单，每天收盘后检查理由、过热档、警戒线，有变化才告诉你。
 
-QuantToGo is not a trading platform, not an asset manager, not a copy-trading community. It is a **quantitative signal source** — like a weather forecast for financial markets. We publish systematic trading signals based on macroeconomic factors; you decide whether to act on them, in your own brokerage account.
-
-## 📊 Live Strategy Performance
-
-<!-- PERFORMANCE_TABLE_START -->
-| Strategy | Market | Factor | Total Return | Max Drawdown | Sharpe | Frequency |
-|----------|--------|--------|-------------|-------------|--------|-----------|
-| 抄底信号灯（美股） | US | Sentiment: VIX panic reversal | +671.8% | -60.0% | 1.5 | Daily |
-| CNH-CHAU | US | FX: CNH-CSI300 correlation | +659.6% | -43.5% | 2.0 | Weekly |
-| 平滑版3x纳指 | US | Trend: TQQQ timing | +558.3% | -69.9% | 1.4 | Monthly |
-| 大小盘IF-IC轮动 | China | Liquidity: large/small cap rotation | +446.2% | -22.0% | 1.9 | Daily |
-| 聪明钱沪深300择时 | China | FX: CNY-index correlation | +385.8% | -29.9% | 1.8 | Daily |
-| PCR散户反指 | US | Sentiment: Put/Call Ratio | +247.9% | -24.8% | 1.7 | Daily |
-| 冷门股反指 | China | Attention: low-volume value | +227.6% | -32.0% | 1.5 | Monthly |
-| 抄底信号灯（A股） | China | Sentiment: limit-down rebound | +81.8% | -9.1% | 1.6 | Daily |
-> **Last updated: 2026-10-05** · Auto-updated weekly via GitHub Actions · [Verify in git history](../../commits/main/README.md)
-<!-- PERFORMANCE_TABLE_END -->
-
-All returns are cumulative since inception. Forward-tracked daily — every signal is timestamped at the moment it's published, immutable, including all losses and drawdowns. Git commit history provides an independent audit trail.
-
-## What is a Quantitative Signal Source?
-
-Most quantitative services fall into three categories: self-build platforms (high technical barrier), asset management (you hand over your money), or copy-trading communities (unverifiable, opaque). A **signal source** is the fourth paradigm:
-
-- A quant team runs strategy models and publishes trading signals
-- You receive the signals and **decide independently** whether to act
-- You execute in **your own brokerage account** — we never touch your funds
-- All historical signals are **forward-tracked with timestamps** — fully auditable
-
-> Think of it as a weather forecast: it tells you there's an 80% chance of rain tomorrow. Whether you bring an umbrella is your decision.
-
-**How to evaluate any signal source — the QTGS Framework:**
-
-| Dimension | Key Question |
-|-----------|-------------|
-| **Forward Tracking Integrity** | Are all signals timestamped and immutable, including losses? |
-| **Strategy Transparency** | Can you explain in one sentence what the strategy profits from? |
-| **Custody Risk** | Are user funds always under user control? Zero custody = zero run-away risk. |
-| **Factor Robustness** | Is the alpha source a durable economic phenomenon, or data-mined coincidence? |
-
-## Quick Start
-
-### Claude Desktop / Claude Code
-
-```json
-{
-  "mcpServers": {
-    "quanttogo": {
-      "command": "npx",
-      "args": ["-y", "quanttogo-mcp"]
-    }
-  }
-}
-```
-
-### Cursor
-
-Add to `.cursor/mcp.json`:
-
-```json
-{
-  "mcpServers": {
-    "quanttogo": {
-      "command": "npx",
-      "args": ["-y", "quanttogo-mcp"]
-    }
-  }
-}
-```
-
-### Coze（扣子）/ Remote SSE
-
-```json
-{
-  "mcpServers": {
-    "quanttogo": {
-      "url": "https://mcp.quanttogo.com/sse",
-      "transportType": "sse"
-    }
-  }
-}
-```
-
-### Remote Streamable HTTP
-
-```
-https://mcp-us.quanttogo.com:8443/mcp
-```
-
-## Tools
-
-### Discovery (free, no auth)
-
-| Tool | Description | Parameters |
-|------|-------------|-----------|
-| `list_strategies` | List all strategies with live performance | none |
-| `get_strategy_performance` | Detailed data + daily NAV history for one strategy | `productId`, `includeChart?` |
-| `compare_strategies` | Side-by-side comparison of 2-8 strategies | `productIds[]` |
-| `get_index_data` | QuantToGo custom indices (DA-MOMENTUM, QTG-MOMENTUM) | `indexId?` |
-| `get_subscription_info` | Subscription plans + how to start a free trial | none |
-
-### Signals (requires API Key — get one via `register_trial`)
-
-| Tool | Description | Parameters |
-|------|-------------|-----------|
-| `register_trial` | Register a 30-day free trial with email, get API Key instantly | `email` |
-| `get_signals` | Get latest buy/sell signals for a strategy | `apiKey`, `productId`, `limit?` |
-| `check_subscription` | Check trial status and remaining days | `apiKey` |
-
-**Resource:** `quanttogo://strategies/overview` — JSON overview of all strategies.
-
-## Try It Now
-
-Ask your AI assistant:
-
-> "List all QuantToGo strategies and compare the top performers."
-
-> "I want to try QuantToGo signals. Register me with my-email@example.com."
-
-> "Show me the latest trading signals for the US panic dip-buying strategy."
-
-> "帮我注册 QuantToGo 试用，邮箱 xxx@gmail.com，然后看看美股策略的最新信号。"
-
-## 🔗 Links
-
-| Audience | URL |
-|----------|-----|
-| **Visitors / Free Trial** | [www.quanttogo.com/playground](https://www.quanttogo.com/playground) |
-| **Subscribers / Invited Users** | [www.quanttogo.com](https://www.quanttogo.com) · [web.quanttogo.com](https://web.quanttogo.com) |
-| **AI Agents / Mechanism Audit** | [www.quanttogo.com/ai/](https://www.quanttogo.com/ai/) |
+- 远程地址（Streamable HTTP）：`https://mcp.quanttogo.com/v2`
+- 旧式 SSE：`https://mcp.quanttogo.com/v2/sse`
+- 网站：[www.quanttogo.com/risk](https://www.quanttogo.com/risk/)
 
 ---
 
 <a id="中文"></a>
 ## 中文
 
-### 什么是 QuantToGo？
+### 接入
 
-QuantToGo 是一个**宏观因子量化信号源**——不是交易平台，不是资管产品，不是跟单社区。
+**Claude Desktop / Claude Code / Cursor**（本包是到远程服务的 stdio 桥）
 
-我们运行基于宏观经济因子（汇率周期、流动性轮动、恐慌情绪、跨市场联动）的量化策略模型，持续发布交易信号。用户接收信号后，自主判断、自主执行、自主承担盈亏。我们不触碰用户的任何资金。
+```json
+{
+  "mcpServers": {
+    "quanttogo": {
+      "command": "npx",
+      "args": ["-y", "quanttogo-mcp"]
+    }
+  }
+}
+```
 
-类比：**天气预报告诉你明天大概率下雨，但不替你决定带不带伞。**
+**扣子（Coze）/ 任何支持远程 MCP 的平台**
 
-### 核心特征
+```json
+{
+  "mcpServers": {
+    "quanttogo": {
+      "url": "https://mcp.quanttogo.com/v2",
+      "transportType": "streamable-http"
+    }
+  }
+}
+```
 
-- **宏观因子驱动**：每个策略的信号来源都有明确的经济学逻辑，不是数据挖掘
-- **指数为主**：80%以上标的为指数ETF/期货，规避个股风险
-- **前置验证**：所有信号从发出那一刻起不可篡改，完整展示回撤和亏损
-- **零资金委托**：你的钱始终在你自己的券商账户
-- **AI原生**：通过MCP协议可被任何AI助手直接调用
+只认旧式 SSE 的平台填 `https://mcp.quanttogo.com/v2/sse`。
 
-### 快速体验
+### 工具
 
-对你的AI助手说：
+| 工具 | 做什么 | 要手机号 |
+|---|---|---|
+| `risk_check` | 查风险读数：三个月内跌 ≥15% 的概率、平时的概率、它自己历史的概率、在不在安全区、最坏情况、过热档和红灯、警戒线三档（1.0 / 1.5 / 2.0 倍波动带）、按哪个标的代算 | 否 |
+| `verify_reasons` | 核对持有理由（九类标签逐条成立 / 已证伪，附依据）；七类「不算理由」回一句话 | 否 |
+| `create_risk_order` | 建风控单：理由必填，没有理由不建；同标的已在盯不重复建 | 是 |
+| `my_risk_orders` | 查我的风控单（在盯 / 已结束 / 单张） | 是 |
+| `market_now` | 市场环境：全市场过热档、大盘波动、亮红灯的行业、31 个行业各自的概率 | 否 |
+| `ledger_review` | 台账复盘：红灯亮了之后真的跌了吗，最近几次逐条 | 否 |
+| `evidence_card` | 广成子证据卡：某行业今天的机会分和证据充分度（只读） | 否 |
+| `login` | 手机号登录 / 注册，和网站同一个账户 | 是 |
 
-> "帮我列出QuantToGo所有的量化策略，看看它们的表现。"
+### 账户
 
-> "帮我注册 QuantToGo 试用，邮箱 xxx@gmail.com，然后看看最新的交易信号。"
+建单、查单要手机号。和网站 QuantToGo 是同一套账户：手机号查到就是你，查不到就按这个手机号新建（限时免费）。手机号是标识，不是密码。
 
-> "有没有做A股的策略？最大回撤在30%以内的。"
+### 试一试
 
-### 🔗 链接
+对你的 AI 助手说：
 
-| 用户类型 | 地址 |
-|----------|------|
-| **访客 / 免费试用** | [www.quanttogo.com/playground](https://www.quanttogo.com/playground) |
-| **订阅用户** | [www.quanttogo.com](https://www.quanttogo.com) · [web.quanttogo.com](https://web.quanttogo.com) |
-| **AI 代理 / 机制审计** | [www.quanttogo.com/ai/](https://www.quanttogo.com/ai/) |
+> 我拿着招商蛇口，帮我看看风险。
 
-### 相关阅读
+> 今天市场热不热？哪些行业亮红灯了？
 
-*《量化信号源》系列文章：*
+> 帮我建一张风控单：招商蛇口，理由是估值见底。
 
-1. [量化信号源：被低估的第四种量化服务范式（QTGS评估框架）](https://zhuanlan.zhihu.com/p/2015693501476659382)
-2. 宏观因子量化：为什么"硬逻辑"比"多因子"更适合信号源模式
-3. 当AI学会调用量化策略：MCP协议与量化信号源的技术实现
-4. 用AI助手获取实盘量化信号：一份实操指南
+> 红灯亮了之后，历史上真的跌了吗？
 
 ---
+
+<a id="english"></a>
+## English
+
+**A risk desk for A-share holdings, exposed as MCP tools.** Give it a ticker, an industry, an ETF or a fund; it returns the probability of a ≥15% drop within three months (vs. the base rate and the name's own history), whether it sits in the safe zone, the overheat level and red-light status, and three stop-line options (1.0 / 1.5 / 2.0 × the 60-day volatility band). It checks the reasons you hold a position, and opens a "risk order" that is re-checked after every close — you are told only when something changes.
+
+Remote endpoint (Streamable HTTP): `https://mcp.quanttogo.com/v2` · legacy SSE: `https://mcp.quanttogo.com/v2/sse`
+
+This npm package is a thin stdio bridge to that endpoint; the tool list is fetched from the server at start.
+
+| Tool | Purpose | Phone needed |
+|---|---|---|
+| `risk_check` | Risk readings for one name | no |
+| `verify_reasons` | Check holding reasons against data | no |
+| `create_risk_order` | Open a risk order (reason required) | yes |
+| `my_risk_orders` | List / inspect my risk orders | yes |
+| `market_now` | Market-wide overheat, volatility, red lights | no |
+| `ledger_review` | Did red lights actually precede drops? | no |
+| `evidence_card` | Industry evidence card (read-only) | no |
+| `login` | Sign in / sign up with a phone number | yes |
+
+Accounts are shared with the website; a phone number identifies the user (same as the website).
 
 ## License
 

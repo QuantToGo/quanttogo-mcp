@@ -1,20 +1,30 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-10-17/server.schema.json",
   "name": "com.quanttogo/quanttogo-mcp",
-  "description": "AI trading signals — 8 live strategies across US and China markets. Free 30-day trial.",
+  "description": "风控单 QuantToGo — risk readings, reason checks and risk orders for A-share holdings.",
   "repository": {
     "url": "https://github.com/QuantToGo/quanttogo-mcp",
     "source": "github"
   },
-  "version": "0.3.0",
+  "version": "1.0.0",
   "packages": [
     {
       "registryType": "npm",
       "identifier": "quanttogo-mcp",
-      "version": "0.3.0",
+      "version": "1.0.0",
       "transport": {
         "type": "stdio"
       }
+    }
+  ],
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://mcp.quanttogo.com/v2"
+    },
+    {
+      "type": "sse",
+      "url": "https://mcp.quanttogo.com/v2/sse"
     }
   ]
 }
