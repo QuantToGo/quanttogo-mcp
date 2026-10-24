@@ -1,12 +1,12 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-10-17/server.schema.json",
   "name": "com.quanttogo/quanttogo-mcp",
-  "description": "QuantToGo 说法百科的 MCP 服务：A 股持仓风险读数、持有理由核对、每天替你盯着的风控单。",
+  "description": "QuantToGo【说法百科】的 MCP 服务：A 股持仓风险读数、持有理由核对、每天替你盯着的风控单。",
   "repository": {
     "url": "https://github.com/QuantToGo/quanttogo-mcp",
     "source": "github"
   },
-  "version": "1.0.0",
+  "version": "1.0.1",
   "packages": [
     {
       "registryType": "npm",
@@ -27,6 +27,6 @@
       "url": "https://mcp.quanttogo.com/v2/sse"
     }
   ],
-  "title": "QuantToGo 说法百科",
+  "title": "QuantToGo【说法百科】",
   "websiteUrl": "https://quanttogo.com/"
 }
