@@ -1,5 +1,7 @@
 # 风控单 QuantToGo — MCP Server
 
+**QuantToGo 说法百科**：大家买卖股票的理由，用 A 股和美股的历史数据查过一遍。网址 [quanttogo.com](https://quanttogo.com)。本项目是它的 MCP 服务「风控单 QuantToGo」，在你自己的 AI 里用。
+
 [![npm](https://img.shields.io/npm/v/quanttogo-mcp)](https://www.npmjs.com/package/quanttogo-mcp) [![Downloads](https://img.shields.io/npm/dw/quanttogo-mcp)](https://www.npmjs.com/package/quanttogo-mcp)
 
 [中文](#中文) | [English](#english)
