@@ -1,6 +1,6 @@
-# QuantToGo【说法百科】 — MCP Server
+# QuantToGo 说法百科 — MCP Server
 
-**QuantToGo【说法百科】**：“老话” 先查再信｜每一句都有数据。网址 [quanttogo.com](https://quanttogo.com)。本项目是它的 MCP 服务，在你自己的 AI 里用。
+**QuantToGo 说法百科**：“老话” 先查再信｜每一句都有数据。网址 [quanttogo.com](https://quanttogo.com)。本项目是它的 MCP 服务，在你自己的 AI 里用。
 
 [![npm](https://img.shields.io/npm/v/quanttogo-mcp)](https://www.npmjs.com/package/quanttogo-mcp) [![Downloads](https://img.shields.io/npm/dw/quanttogo-mcp)](https://www.npmjs.com/package/quanttogo-mcp)
 
