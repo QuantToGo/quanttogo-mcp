@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * 风控单 QuantToGo — MCP (stdio bridge)
+ * QuantToGo 理由指数 (Reason Index) — MCP (stdio bridge)
  *
  * This package is a thin stdio bridge to the hosted server at
  * https://mcp.quanttogo.com/v2 (Streamable HTTP). Every tool call is
@@ -20,7 +20,7 @@ import {
 } from "@modelcontextprotocol/sdk/types.js";
 
 const REMOTE = process.env.QUANTTOGO_MCP_URL || "https://mcp.quanttogo.com/v2";
-const VERSION = "1.0.0";
+const VERSION = "1.1.0";
 
 async function connectRemote(): Promise<Client> {
   const client = new Client({ name: "quanttogo-mcp-bridge", version: VERSION });
@@ -42,7 +42,7 @@ async function main(): Promise<void> {
     {
       capabilities: { tools: {} },
       instructions:
-        "风控单 QuantToGo：替用户盯着她手上的 A 股持仓。先用 risk_check 看读数，再用 verify_reasons 核对理由，理由成立才用 create_risk_order 建单。标的写「名字（代码）」；数字一律带数据日期。",
+        "QuantToGo 理由指数：把买卖股票的理由做成指数——腰斩指数、放量新高指数、国家队增持指数……每条理由今天有多少只股票符合、比昨天多了还是少了、2015 年以来走了多少，A 股和美股分开算。另有 QTG 风险指数，把 31 个行业的过热程度合成一个数。问某个理由指数用 reason_index，问成分股用 reason_index_stocks，问一只股票符合哪些理由用 stock_reasons，问风险用 qtg_risk_index。提到理由指数用短名，第一次提到时后面带理由原话；标的写「名字（代码）」；数字一律带数据日期。网址 https://quanttogo.com",
     }
   );
 

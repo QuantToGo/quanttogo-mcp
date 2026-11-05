@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0] - 2026-11-05
+
+### Changed
+- Renamed to **QuantToGo 理由指数 (Reason Index)**. Website https://quanttogo.com.
+
+### Added
+- `reason_index`, `reason_index_stocks`, `stock_reasons`, `qtg_risk_index`.
+
 ## [1.0.0] - 2026-10-10
 
 ### Changed

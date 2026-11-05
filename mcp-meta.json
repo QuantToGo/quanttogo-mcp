@@ -1,17 +1,17 @@
 {
   "name": "quanttogo-mcp",
-  "title": "风控单 QuantToGo — A-share risk desk",
-  "description": "替你盯着手上的 A 股持仓：查风险读数（三个月内跌 ≥15% 的概率、安全区、过热档、警戒线三档）、核对持有理由、建风控单、看市场环境和台账复盘。远程地址 https://mcp.quanttogo.com/v2",
+  "title": "QuantToGo 理由指数 — Reason Index",
+  "description": "QuantToGo 理由指数：把买卖股票的理由做成指数——腰斩指数、放量新高指数、国家队增持指数……每条理由今天有多少只股票符合、比昨天多了还是少了、2015 年以来走了多少，A 股和美股分开算。另有 QTG 风险指数，把 31 个行业的过热程度合成一个数。网址 https://quanttogo.com",
   "author": {
     "name": "QuantToGo"
   },
   "gitUrl": "https://github.com/QuantToGo/quanttogo-mcp",
   "tags": [
-    "risk-management",
-    "a-share",
-    "quantitative-finance",
+    "reason-index",
+    "stock-index",
+    "a-shares",
+    "us-stocks",
     "MCP",
-    "AI-agent",
     "quanttogo"
   ],
   "port": 80,

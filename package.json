@@ -1,7 +1,7 @@
 {
   "name": "quanttogo-mcp",
-  "version": "1.0.0",
-  "description": "风控单 QuantToGo — MCP server: risk readings, reason checks and risk orders for A-share holdings. Bridge to https://mcp.quanttogo.com/v2",
+  "version": "1.1.0",
+  "description": "QuantToGo Reason Index: every reason people buy or sell stocks, turned into an index — Halved Index, Breakout Index, National Team Index… how many stocks fit each reason today, versus yesterday, and since 2015, for China A-shares and US stocks separately. Plus the QTG Risk Index: overheating across 31 sectors in one number. https://quanttogo.com",
   "mcpName": "com.quanttogo/quanttogo-mcp",
   "main": "dist/index.js",
   "bin": {
@@ -22,11 +22,12 @@
   "keywords": [
     "mcp",
     "model-context-protocol",
-    "risk-management",
-    "a-share",
+    "reason-index",
+    "stock-index",
+    "a-shares",
+    "us-stocks",
     "china-stocks",
-    "quantitative",
-    "ai-agent",
+    "risk-index",
     "finance",
     "quanttogo"
   ],
@@ -36,7 +37,7 @@
     "type": "git",
     "url": "https://github.com/QuantToGo/quanttogo-mcp"
   },
-  "homepage": "https://www.quanttogo.com",
+  "homepage": "https://quanttogo.com",
   "engines": {
     "node": ">=18.0.0"
   },

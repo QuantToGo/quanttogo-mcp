@@ -1,16 +1,14 @@
-# QuantToGo 说法百科 — MCP Server
-
-**QuantToGo 说法百科**：“老话” 先查再信｜每一句都有数据。网址 [quanttogo.com](https://quanttogo.com)。本项目是它的 MCP 服务，在你自己的 AI 里用。
+# QuantToGo 理由指数 — MCP Server
 
 [![npm](https://img.shields.io/npm/v/quanttogo-mcp)](https://www.npmjs.com/package/quanttogo-mcp) [![Downloads](https://img.shields.io/npm/dw/quanttogo-mcp)](https://www.npmjs.com/package/quanttogo-mcp)
 
 [中文](#中文) | [English](#english)
 
-**替你盯着手上的 A 股持仓。** 给一个标的（个股、行业、ETF、基金、宽基指数），返回它三个月内跌 ≥15% 的概率、平时的概率、在不在安全区、过热档和红灯、警戒线三档；核对你的持有理由；建一张风控单，每天收盘后检查理由、过热档、警戒线，有变化才告诉你。
+**QuantToGo 理由指数：把买卖股票的理由做成指数**——腰斩指数、放量新高指数、国家队增持指数……每条理由今天有多少只股票符合、比昨天多了还是少了、2015 年以来走了多少，A 股和美股分开算。另有 QTG 风险指数，把 31 个行业的过热程度合成一个数。
 
+- 网站：[quanttogo.com](https://quanttogo.com)
 - 远程地址（Streamable HTTP）：`https://mcp.quanttogo.com/v2`
 - 旧式 SSE：`https://mcp.quanttogo.com/v2/sse`
-- 网站：[www.quanttogo.com/risk](https://www.quanttogo.com/risk/)
 
 ---
 
@@ -45,60 +43,72 @@
 }
 ```
 
-只认旧式 SSE 的平台填 `https://mcp.quanttogo.com/v2/sse`。
-
 ### 工具
 
-| 工具 | 做什么 | 要手机号 |
-|---|---|---|
-| `risk_check` | 查风险读数：三个月内跌 ≥15% 的概率、平时的概率、它自己历史的概率、在不在安全区、最坏情况、过热档和红灯、警戒线三档（1.0 / 1.5 / 2.0 倍波动带）、按哪个标的代算 | 否 |
-| `verify_reasons` | 核对持有理由（九类标签逐条成立 / 已证伪，附依据）；七类「不算理由」回一句话 | 否 |
-| `create_risk_order` | 建风控单：理由必填，没有理由不建；同标的已在盯不重复建 | 是 |
-| `my_risk_orders` | 查我的风控单（在盯 / 已结束 / 单张） | 是 |
-| `market_now` | 市场环境：全市场过热档、大盘波动、亮红灯的行业、31 个行业各自的概率 | 否 |
-| `ledger_review` | 台账复盘：红灯亮了之后真的跌了吗，最近几次逐条 | 否 |
-| `evidence_card` | 广成子证据卡：某行业今天的机会分和证据充分度（只读） | 否 |
-| `login` | 手机号登录 / 注册，和网站同一个账户 | 是 |
+| 工具 | 做什么 |
+|---|---|
+| `reason_index` | 列出全部理由指数；或者查一个指数：今天符合的只数和它在一年里的位置、A 股和美股点位、比上一个交易日涨跌、2015 年以来涨跌和同期大盘 |
+| `reason_index_stocks` | 某个理由指数今天的成分股，按市值排 |
+| `stock_reasons` | 一只股票今天在哪几个理由指数里 |
+| `qtg_risk_index` | QTG 风险指数：全市场和 31 个申万一级行业的风险指数、今天亮红灯的行业、历史上同一区间之后沪深300 跌 15% 以上的概率 |
+| `risk_check` | 一只 A 股标的的风险读数：三个月内跌 ≥15% 的概率、过热档、警戒线三档 |
+| `verify_reasons` | 核对用户的持有理由今天还成不成立 |
+| `create_risk_order` | 建一张单子，每天收盘后检查理由和警戒线，有变化才告诉用户（要手机号） |
+| `my_risk_orders` | 查这个手机号名下的单子 |
+| `market_now` | 今天的市场环境和 31 个行业的过热档 |
+| `ledger_review` | 红灯亮了之后真的跌了吗：历次记录 |
+| `evidence_card` | 某个行业的证据卡 |
+| `login` | 手机号登录/注册，和网站同一套账户 |
 
-### 账户
+### 问法举例
 
-建单、查单要手机号。和网站 QuantToGo 是同一套账户：手机号查到就是你，查不到就按这个手机号新建（限时免费）。手机号是标识，不是密码。
-
-### 试一试
-
-对你的 AI 助手说：
-
-> 我拿着招商蛇口，帮我看看风险。
-
-> 今天市场热不热？哪些行业亮红灯了？
-
-> 帮我建一张风控单：招商蛇口，理由是估值见底。
-
-> 红灯亮了之后，历史上真的跌了吗？
+- 腰斩指数今天多少点？
+- 今天有哪些股票符合「放量新高」？
+- 贵州茅台今天在哪几个理由指数里？
+- QTG 风险指数现在多少？医药生物风险大不大？
 
 ---
 
 <a id="english"></a>
 ## English
 
-**A risk desk for A-share holdings, exposed as MCP tools.** Give it a ticker, an industry, an ETF or a fund; it returns the probability of a ≥15% drop within three months (vs. the base rate and the name's own history), whether it sits in the safe zone, the overheat level and red-light status, and three stop-line options (1.0 / 1.5 / 2.0 × the 60-day volatility band). It checks the reasons you hold a position, and opens a "risk order" that is re-checked after every close — you are told only when something changes.
+**QuantToGo Reason Index: every reason people buy or sell stocks, turned into an index** — Halved Index, Breakout Index, National Team Index… how many stocks fit each reason today, versus yesterday, and since 2015, for China A-shares and US stocks separately. Plus the QTG Risk Index: overheating across 31 sectors in one number.
 
-Remote endpoint (Streamable HTTP): `https://mcp.quanttogo.com/v2` · legacy SSE: `https://mcp.quanttogo.com/v2/sse`
+- Website: [quanttogo.com](https://quanttogo.com)
+- Remote (Streamable HTTP): `https://mcp.quanttogo.com/v2`
+- Legacy SSE: `https://mcp.quanttogo.com/v2/sse`
 
-This npm package is a thin stdio bridge to that endpoint; the tool list is fetched from the server at start.
+### Install
 
-| Tool | Purpose | Phone needed |
-|---|---|---|
-| `risk_check` | Risk readings for one name | no |
-| `verify_reasons` | Check holding reasons against data | no |
-| `create_risk_order` | Open a risk order (reason required) | yes |
-| `my_risk_orders` | List / inspect my risk orders | yes |
-| `market_now` | Market-wide overheat, volatility, red lights | no |
-| `ledger_review` | Did red lights actually precede drops? | no |
-| `evidence_card` | Industry evidence card (read-only) | no |
-| `login` | Sign in / sign up with a phone number | yes |
+```json
+{
+  "mcpServers": {
+    "quanttogo": {
+      "command": "npx",
+      "args": ["-y", "quanttogo-mcp"]
+    }
+  }
+}
+```
 
-Accounts are shared with the website; a phone number identifies the user (same as the website).
+### Tools
+
+| Tool | What it does |
+|---|---|
+| `reason_index` | List all reason indexes, or look up one: stocks that fit today and where that count sits in the past year, A-share and US index level, change vs the previous trading day, change since 2015 vs the market |
+| `reason_index_stocks` | Today's member stocks of a reason index, by market cap |
+| `stock_reasons` | Which reason indexes a stock is in today |
+| `qtg_risk_index` | QTG Risk Index for the whole market and 31 SW level-1 sectors, sectors with a red light today, and how often CSI 300 fell 15%+ afterwards |
+| `risk_check` | Risk readings for one A-share target |
+| `verify_reasons` | Check whether a holder's reasons still hold today |
+| `create_risk_order` | Watch a holding and its reasons daily after close (phone number required) |
+| `my_risk_orders` | Orders under a phone number |
+| `market_now` | Today's market and overheating across 31 sectors |
+| `ledger_review` | What happened after past red lights |
+| `evidence_card` | Evidence card for a sector |
+| `login` | Phone login / sign-up, same account as the website |
+
+Tool descriptions and answers are in Chinese.
 
 ## License
 
